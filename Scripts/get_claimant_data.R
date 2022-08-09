@@ -2,6 +2,7 @@ library(httr)
 library(dplyr)
 library(stringr)
 library(magrittr)
+library(tibble)
 
 #This script queries the NOMIS API for data for two LGBF indicators;
 #ECON 12a:  Claimants as a proportion of residents aged 16-64
@@ -12,7 +13,7 @@ library(magrittr)
 
 get_claimant_propo_16_65 <- httr::GET("https://www.nomisweb.co.uk/api/v01/dataset/NM_162_1.data.csv?geography=2013265931TYPE432&measure=2&measures=20100&gender=0&time=2010,latest&age=0&select=DATE,GEOGRAPHY_NAME,OBS_VALUE")
 claimant_propo_16_65 <- content(get_claimant_propo_16_65, as = "parsed", type = "text/csv") %>%
-  as.tibble() %>%
+  as_tibble() %>%
   dplyr::filter(grepl("03", DATE)) %>%
   dplyr::rename(Year = DATE, 
                 ClaimantsAsPropOf16_65Pop = OBS_VALUE,
